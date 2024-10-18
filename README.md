@@ -1,12 +1,43 @@
-# go-musthave-diploma-tpl
+# gofermart
 
-Шаблон репозитория для индивидуального дипломного проекта курса «Go-разработчик»
+Индивидуальный дипломный проект курса «Go-разработчик»
 
-# Начало работы
+## Локальный запуск автотестов
 
-1. Склонируйте репозиторий в любую подходящую директорию на вашем компьютере.
-2. В корне репозитория выполните команду `go mod init <name>` (где `<name>` — адрес вашего репозитория на GitHub без
-   префикса `https://`) для создания модуля
+Установить `gophermarttest` [отсюда](https://github.com/Yandex-Practicum/go-autotests?tab=readme-ov-file#%D1%82%D1%80%D0%B5%D0%BA-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D1%81%D0%BE%D0%BA%D1%80%D0%B0%D1%89%D0%B5%D0%BD%D0%B8%D1%8F-url)
+Установить `statictest` [отсюда](https://github.com/Yandex-Practicum/go-autotests?tab=readme-ov-file#%D1%82%D1%80%D0%B5%D0%BA-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D1%81%D0%BE%D0%BA%D1%80%D0%B0%D1%89%D0%B5%D0%BD%D0%B8%D1%8F-url)
+
+Для статического теста
+```shell
+make lint
+```
+
+Для запуска gophermarttest тестов
+```shell
+make test-proj
+```
+
+### Дополнительные команды
+
+Для генерации моков
+```shell
+make mock
+```
+
+Для запуска unit тестов выполняем
+```shell
+make tests
+```
+
+Для запуска accrual-системы выполняем
+```shell
+make accrual-start
+```
+
+Для остановки accrual-системы выполняем
+```shell
+make accrual-stop
+```
 
 # Обновление шаблона
 
