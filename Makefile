@@ -42,7 +42,7 @@ test-proj: # run gophermarttest
 
 .PHONY: accrual-start
 accrual-start: # start accrual server
-	RUN_ADDRESS=${ACCRUAL_SYSTEM_ADDRESS_PARAM} nohup ./cmd/accrual/accrual_linux_amd64 &
+	RUN_ADDRESS=${ACCRUAL_SYSTEM_ADDRESS_PARAM} DATABASE_URI="${ACCRUAL_DATABASE_URI}" nohup ./cmd/accrual/accrual_linux_amd64 &
 
 .PHONY: accrual-stop
 accrual-stop: # stop accrual server

@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: shortener-postgres-local
+    container_name: gophermart-postgres-local
     ports:
       - "5432:5432"
     environment:
@@ -26,8 +26,39 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  postgres_accrual:
+    image: postgres:16
+    container_name: gophermart-accrual-postgres-local
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: ${ACCRUAL_POSTGRES_DB}
+      POSTGRES_USER: ${ACCRUAL_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ACCRUAL_POSTGRES_PASSWORD}
+    volumes:
+      - accrual_postgres:/var/lib/postgresql/data
+      - accrual_postgres.logs:/var/log/postgresql
+    command:
+      - postgres
+      - -c
+      - logging_collector=on
+      - -c
+      - log_directory=/var/log/postgresql
+      - -c
+      - log_filename=postgresql-%Y-%m-%d_%H%M.log
+      - -c
+      - log_rotation_size=10MB
+      - -c
+      - log_truncate_on_rotation=off
+    security_opt:
+      - no-new-privileges:true
+
 volumes:
   postgres:
     driver: local
   postgres.logs:
+    driver: local
+  accrual_postgres:
+    driver: local
+  accrual_postgres.logs:
     driver: local
