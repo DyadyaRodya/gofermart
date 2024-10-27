@@ -31,3 +31,6 @@ coverage.out
 
 # logs
 *.log
+
+# http requests private vars
+http-client.private.env.json
