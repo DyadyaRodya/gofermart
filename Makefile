@@ -12,11 +12,16 @@ install: install_bin
 
 .PHONY:
 mockery:
-	$(LOCAL_BIN)/mockery --name $(name) --dir $(dir) --output $(dir)/mocks
+	$(LOCAL_BIN)/mockery --name $(name) --dir $(dir) --output $(output)/mocks
 
 .PHONY:
 mock:
-	echo "Nothing to mock"
+	make mockery name=OrderAccrualGateway dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=LuhnService dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=PasswordService dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=RepoSession dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=Repository dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=UUIDGenerator dir=./internal/interactors/interfaces output=./internal/interactors
 
 .PHONY: lint
 lint: # run statictest
