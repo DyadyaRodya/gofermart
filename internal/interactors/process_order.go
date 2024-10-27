@@ -7,6 +7,7 @@ import (
 	domainmodels "github.com/DyadyaRodya/gofermart/internal/domain/models"
 	interactorsdto "github.com/DyadyaRodya/gofermart/internal/interactors/dto"
 	"github.com/DyadyaRodya/gofermart/internal/interactors/interfaces"
+	"time"
 )
 
 type (
@@ -35,7 +36,10 @@ func (i *ProcessOrderInteractor) Run(
 			updatedOrder, err := i.Handle(ctx, order)
 			if err != nil {
 				errorLogger(fmt.Sprintf("ProcessOrderInteractor.Handle: %v", err))
-				go func() { opChan <- order }() // try again later
+				go func() { // try again later
+					time.Sleep(30 * time.Second)
+					opChan <- order
+				}()
 				continue
 			}
 

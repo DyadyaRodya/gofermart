@@ -27,18 +27,26 @@ func (i *AddOrderInteractor) Handle(ctx context.Context, userUUID, orderNumber s
 	if !i.luhnDomainService.Validate(orderNumber) {
 		return domainmodels.ErrOrderNumberInvalid
 	}
-	order := &domainmodels.Order{
-		Number:     orderNumber,
-		Status:     domainmodels.OrderStatusNew,
-		UploadedAt: time.Now(),
-		UserUUID:   userUUID,
-	}
-
 	dbSess, err := i.repo.NewSession(ctx)
 	if err != nil {
 		return fmt.Errorf("AddOrderInteractor.repo.NewSession: %w", err)
 	}
 	defer dbSess.Close(ctx)
+
+	order, err := dbSess.GetOrderByNumberAndUserUUID(ctx, orderNumber, userUUID)
+	if err != nil {
+		return fmt.Errorf("AddOrderInteractor.dbSess.GetOrderByNumberAndUserUUID: %w", err)
+	}
+	if order != nil {
+		return domainmodels.ErrSameUserOrderExists
+	}
+
+	order = &domainmodels.Order{
+		Number:     orderNumber,
+		Status:     domainmodels.OrderStatusNew,
+		UploadedAt: time.Now(),
+		UserUUID:   userUUID,
+	}
 
 	order, err = dbSess.AddOrder(ctx, order)
 	if errors.Is(err, domainmodels.ErrOrderExists) {

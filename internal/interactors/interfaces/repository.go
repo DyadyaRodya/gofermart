@@ -13,6 +13,7 @@ type RepoSession interface {
 	AddOrder(ctx context.Context, order *domainmodels.Order) (*domainmodels.Order, error)
 	UpdateOrder(ctx context.Context, order *domainmodels.Order) error
 	GetOrdersByUserUUID(ctx context.Context, userUUID string) ([]*domainmodels.Order, error)
+	GetOrderByNumberAndUserUUID(ctx context.Context, number, userUUID string) (*domainmodels.Order, error)
 
 	AddWithdraw(ctx context.Context, withdraw *domainmodels.Withdraw) (*domainmodels.Withdraw, error)
 	GetWithdrawalsByUserUUID(ctx context.Context, userUUID string) ([]*domainmodels.Withdraw, error)

@@ -282,6 +282,66 @@ func (_c *RepoSession_Commit_Call) RunAndReturn(run func(context.Context) error)
 	return _c
 }
 
+// GetOrderByNumberAndUserUUID provides a mock function with given fields: ctx, number, userUUID
+func (_m *RepoSession) GetOrderByNumberAndUserUUID(ctx context.Context, number string, userUUID string) (*models.Order, error) {
+	ret := _m.Called(ctx, number, userUUID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetOrderByNumberAndUserUUID")
+	}
+
+	var r0 *models.Order
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) (*models.Order, error)); ok {
+		return rf(ctx, number, userUUID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) *models.Order); ok {
+		r0 = rf(ctx, number, userUUID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*models.Order)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, number, userUUID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// RepoSession_GetOrderByNumberAndUserUUID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetOrderByNumberAndUserUUID'
+type RepoSession_GetOrderByNumberAndUserUUID_Call struct {
+	*mock.Call
+}
+
+// GetOrderByNumberAndUserUUID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - number string
+//   - userUUID string
+func (_e *RepoSession_Expecter) GetOrderByNumberAndUserUUID(ctx interface{}, number interface{}, userUUID interface{}) *RepoSession_GetOrderByNumberAndUserUUID_Call {
+	return &RepoSession_GetOrderByNumberAndUserUUID_Call{Call: _e.mock.On("GetOrderByNumberAndUserUUID", ctx, number, userUUID)}
+}
+
+func (_c *RepoSession_GetOrderByNumberAndUserUUID_Call) Run(run func(ctx context.Context, number string, userUUID string)) *RepoSession_GetOrderByNumberAndUserUUID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *RepoSession_GetOrderByNumberAndUserUUID_Call) Return(_a0 *models.Order, _a1 error) *RepoSession_GetOrderByNumberAndUserUUID_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *RepoSession_GetOrderByNumberAndUserUUID_Call) RunAndReturn(run func(context.Context, string, string) (*models.Order, error)) *RepoSession_GetOrderByNumberAndUserUUID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetOrdersByUserUUID provides a mock function with given fields: ctx, userUUID
 func (_m *RepoSession) GetOrdersByUserUUID(ctx context.Context, userUUID string) ([]*models.Order, error) {
 	ret := _m.Called(ctx, userUUID)

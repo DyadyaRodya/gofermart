@@ -19,14 +19,15 @@ type Gateway struct {
 	errorLogger GatewayErrorLogger
 }
 
-func NewGateway(config *Config) (*Gateway, error) {
+func NewGateway(config *Config, errorLogger GatewayErrorLogger) (*Gateway, error) {
 	gatewayURL, err := url.Parse(config.Host)
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse gateway url: %w", err)
 	}
 	return &Gateway{
-		config:     config,
-		gatewayURL: gatewayURL,
-		client:     accrualsdk.NewAccrualClient(gatewayURL, config.SkipTLS),
+		config:      config,
+		gatewayURL:  gatewayURL,
+		client:      accrualsdk.NewAccrualClient(gatewayURL, config.SkipTLS),
+		errorLogger: errorLogger,
 	}, nil
 }

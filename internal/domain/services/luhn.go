@@ -8,6 +8,10 @@ const (
 type LuhnDomainService struct {
 }
 
+func NewLuhnDomainService() *LuhnDomainService {
+	return &LuhnDomainService{}
+}
+
 func (l *LuhnDomainService) Validate(number string) bool {
 	p := len(number) % 2
 	sum, ok := l.calculateLuhnSum(number, p)

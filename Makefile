@@ -19,6 +19,7 @@ mock:
 	make mockery name=OrderAccrualGateway dir=./internal/interactors/interfaces output=./internal/interactors
 	make mockery name=LuhnService dir=./internal/interactors/interfaces output=./internal/interactors
 	make mockery name=PasswordService dir=./internal/interactors/interfaces output=./internal/interactors
+	make mockery name=LoginService dir=./internal/interactors/interfaces output=./internal/interactors
 	make mockery name=RepoSession dir=./internal/interactors/interfaces output=./internal/interactors
 	make mockery name=Repository dir=./internal/interactors/interfaces output=./internal/interactors
 	make mockery name=UUIDGenerator dir=./internal/interactors/interfaces output=./internal/interactors
@@ -39,11 +40,11 @@ test-proj: # run gophermarttest
                 -gophermart-binary-path=cmd/gophermart/gophermart \
                 -gophermart-host=localhost \
                 -gophermart-port=8080 \
-                -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" \
+                -gophermart-database-uri="${DATABASE_URI}" \
                 -accrual-binary-path=cmd/accrual/accrual_linux_amd64 \
                 -accrual-host=localhost \
-                -accrual-port=$(random unused-port) \
-                -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable"
+                -accrual-port=8100 \
+                -accrual-database-uri="${ACCRUAL_DATABASE_URI}"
 
 .PHONY: accrual-start
 accrual-start: # start accrual server

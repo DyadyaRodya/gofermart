@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"crypto/subtle"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"github.com/DyadyaRodya/gofermart/internal/domain/models"
@@ -87,6 +88,6 @@ func (p *PasswordDomainService) GenerateRandomSalt(saltSize int) (string, error)
 	if err != nil {
 		return "", errors.Join(err, models.ErrSaltGeneration)
 	}
-	return string(saltBytes), nil
+	return base64.StdEncoding.EncodeToString(saltBytes), nil
 
 }

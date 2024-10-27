@@ -29,6 +29,11 @@ func (a AccrualPoint) Float64() float64 {
 	return float64(a) / 100.0
 }
 
+func (a AccrualPoint) MarshalJSON() ([]byte, error) {
+	s := a.String()
+	return []byte(s), nil
+}
+
 func AccrualPointFromFloat64(num float64) AccrualPoint {
 	return AccrualPoint(num * 100)
 }

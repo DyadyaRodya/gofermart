@@ -13,6 +13,7 @@ import (
 type RegisterInteractor struct {
 	repo            interfaces.Repository
 	passwordService interfaces.PasswordService
+	loginService    interfaces.LoginService
 	uuidGenerator   interfaces.UUIDGenerator
 	saltSize        int
 }
@@ -20,12 +21,14 @@ type RegisterInteractor struct {
 func NewRegisterInteractor(
 	repo interfaces.Repository,
 	ps interfaces.PasswordService,
+	ls interfaces.LoginService,
 	uuidGenerator interfaces.UUIDGenerator,
 	saltSize int,
 ) *RegisterInteractor {
 	return &RegisterInteractor{
 		repo:            repo,
 		passwordService: ps,
+		loginService:    ls,
 		uuidGenerator:   uuidGenerator,
 		saltSize:        saltSize,
 	}
@@ -37,6 +40,11 @@ func (i *RegisterInteractor) Handle(ctx context.Context, creds *interactorsdto.C
 		return nil, fmt.Errorf("RegisterInteractor.repo.NewSession: %w", err)
 	}
 	defer dbSess.Close(ctx)
+
+	err = i.loginService.Validate(creds.Login)
+	if err != nil {
+		return nil, err
+	}
 
 	userInfo, err := dbSess.GetUserByLogin(ctx, creds.Login)
 	if err != nil && !errors.Is(err, domainmodels.ErrUserNotFound) {
