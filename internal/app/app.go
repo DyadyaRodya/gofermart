@@ -97,7 +97,7 @@ func InitApp(defaultServerAddress, defaultAccrualServerAddress, defaultLogLevel 
 	repo := pgxrepo.NewStorePGX(pool, appLogger)
 
 	// auth middleware
-	authMW := middlewares.NewAuthMiddleware(jwtService, repo)
+	authMW := middlewares.NewAuthMiddleware(jwtService, repo, appLogger)
 
 	// chan
 	processOrderChan := make(chan *domainmodels.Order, 1024)

@@ -7,18 +7,21 @@ import (
 	httpdto "github.com/DyadyaRodya/gofermart/internal/http/dto"
 	httpinterfaces "github.com/DyadyaRodya/gofermart/internal/http/interfaces"
 	"github.com/DyadyaRodya/gofermart/internal/interactors/interfaces"
+	"go.uber.org/zap"
 	"net/http"
 )
 
 type AuthMiddleware struct {
 	jwtService httpinterfaces.JWTService
 	repo       interfaces.Repository
+	logger     *zap.Logger
 }
 
-func NewAuthMiddleware(jwtService httpinterfaces.JWTService, repo interfaces.Repository) *AuthMiddleware {
+func NewAuthMiddleware(jwtService httpinterfaces.JWTService, repo interfaces.Repository, logger *zap.Logger) *AuthMiddleware {
 	return &AuthMiddleware{
 		jwtService: jwtService,
 		repo:       repo,
+		logger:     logger,
 	}
 }
 
@@ -43,6 +46,7 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 			}
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnauthorized)
+			m.logger.Info("Unauthorized user: no token or token bad")
 			return
 		}
 
@@ -66,6 +70,7 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 			}
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnauthorized)
+			m.logger.Info("Unauthorized user: not exists or deleted")
 			return
 		}
 
@@ -77,6 +82,7 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 		}
 		http.SetCookie(w, httpdto.NewAuthCookie(newToken, httpdto.CookieName, httpdto.Path, httpdto.TTL))
 
+		m.logger.Info("Authorized user", zap.String("login", userInfo.Login))
 		next.ServeHTTP(w, r.WithContext(newCTX))
 	}
 }

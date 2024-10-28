@@ -10,7 +10,7 @@ import (
 const (
 	defaultServerAddress        = `:8080`
 	defaultAccrualServerAddress = "http://localhost:8100"
-	defaultLogLevel             = "info"
+	defaultLogLevel             = "debug"
 	defaultSaltSize             = 16
 )
 
