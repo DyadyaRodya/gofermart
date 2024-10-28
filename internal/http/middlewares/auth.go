@@ -39,13 +39,13 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 		}
 
 		if userUUID == "" || login == "" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
 			_, err := w.Write([]byte(`{"detail":"Unauthorized"}`))
 			if err != nil {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				return
 			}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
 			m.logger.Info("Unauthorized user: no token or token bad")
 			return
 		}
@@ -63,13 +63,13 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 			return
 		}
 		if userInfo == nil || errors.Is(err, domainmodels.ErrUserNotFound) || userInfo.UUID != userUUID {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
 			_, err := w.Write([]byte(`{"detail":"Unauthorized"}`))
 			if err != nil {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				return
 			}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
 			m.logger.Info("Unauthorized user: not exists or deleted")
 			return
 		}
