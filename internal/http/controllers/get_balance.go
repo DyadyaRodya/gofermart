@@ -19,12 +19,14 @@ func NewGetBalanceController(interactor *interactors.GetBalanceInteractor) *GetB
 }
 
 func (c *GetBalanceController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	ctx := r.Context()
 	userInfo := ctx.Value(domainmodels.UserInfo{}).(*domainmodels.UserInfo)
 
 	balanceInfo, err := c.interactor.Handle(ctx, userInfo.UUID)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
 	}
 	dto := httpdto.FromBalanceInfo(balanceInfo)
 	body, err := json.Marshal(dto)
@@ -37,6 +39,5 @@ func (c *GetBalanceController) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }

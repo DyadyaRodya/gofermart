@@ -19,6 +19,7 @@ func NewGetUserWithdrawalsController(interactor *interactors.GetWithdrawalsInter
 }
 
 func (c *GetUserWithdrawalsController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	ctx := r.Context()
 	userInfo := ctx.Value(domainmodels.UserInfo{}).(*domainmodels.UserInfo)
 
@@ -48,6 +49,5 @@ func (c *GetUserWithdrawalsController) ServeHTTP(w http.ResponseWriter, r *http.
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }

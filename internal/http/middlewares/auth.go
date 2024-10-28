@@ -36,7 +36,13 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 		}
 
 		if userUUID == "" || login == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			_, err := w.Write([]byte(`{"detail":"Unauthorized"}`))
+			if err != nil {
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
@@ -53,7 +59,13 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 			return
 		}
 		if userInfo == nil || errors.Is(err, domainmodels.ErrUserNotFound) || userInfo.UUID != userUUID {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			_, err := w.Write([]byte(`{"detail":"Unauthorized"}`))
+			if err != nil {
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
@@ -61,6 +73,7 @@ func (m *AuthMiddleware) WithAuth(next http.Handler) http.HandlerFunc {
 		newToken, err := m.jwtService.NewUserToken(userInfo, httpdto.TTL)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
 		}
 		http.SetCookie(w, httpdto.NewAuthCookie(newToken, httpdto.CookieName, httpdto.Path, httpdto.TTL))
 
